@@ -56,7 +56,7 @@ parameters:
   displayName: PostgreSQL version (e.g. 9.6)
   name: POSTGRESQL_VERSION
   required: true
-  value: 9.6
+  value: "9.6"
 - description: Name of new PostgreSQL image.
   displayName: PostgreSQL image name
   name: IMAGE_STREAM_NAME
@@ -70,7 +70,7 @@ parameters:
 - description: Git branch/tag reference
   displayName: Git Reference
   name: SOURCE_REPOSITORY_REF
-  value: 9.6
+  value: "9.6"
 - description: Path within Git project to build; empty for root project directory.
   displayName: Context Directory
   name: CONTEXT_DIR
