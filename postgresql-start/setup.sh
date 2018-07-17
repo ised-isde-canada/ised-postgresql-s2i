@@ -1,12 +1,5 @@
 echo "Begin database setup..."
 
-echo ""
-echo "dbuser:     $DB_USERNAME"
-echo "dbpassword: $DB_PASSWORD" 
-echo "dbname:     $POSTGRESQL_DATABASE"
-echo "dbadmin:    $POSTGRESQL_USER"
-echo ""
-
 sed -i -e "s/:dbpassword/$DB_PASSWORD/g" /opt/app-root/src/postgresql-start/setupdb.sql
 
 psql -v dbuser=$DB_USERNAME \
