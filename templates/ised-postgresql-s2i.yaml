@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: ised-postgresql-s2i
+message: Building a new postgresql base image.
+metadata:
+  annotations:
+    description: Builds a custom PostgreSQL base imaage with custom configuration for ISED.
+    iconClass: icon-postgresql
+    openshift.io/display-name: ISED PostgreSQL Build Template
+    openshift.io/provider-display-name: ISED Canada
+    tags: postgresql,database
+    template.openshift.io/documentation-url: https://github.com/sclorg/postgresql-container
+    template.openshift.io/long-description: Builds a custom PostgreSQL base imaage with custom configuration for ISED.
+    template.openshift.io/support-url: https://access.redhat.com
+    version: 1.0.0
+  name: ised-postgresql-s2i
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      application: ${IMAGE_STREAM_NAME}
+    name: ${IMAGE_STREAM_NAME}
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      application: ${IMAGE_STREAM_NAME}
+    name: ${IMAGE_STREAM_NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${IMAGE_STREAM_NAME}:${POSTGRESQL_VERSION}
+    source:
+      contextDir: ${CONTEXT_DIR}
+      git:
+        ref: ${SOURCE_REPOSITORY_REF}
+        uri: ${SOURCE_REPOSITORY_URL}
+      type: Git
+    strategy:
+      sourceStrategy:
+        forcePull: true
+        from:
+          kind: ImageStreamTag
+          name: postgresql:${POSTGRESQL_VERSION}
+          namespace: openshift
+      type: Source
+    triggers:
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
+parameters:
+- description: Base PostgreSQL version.
+  displayName: PostgreSQL version (e.g. 9.6)
+  name: POSTGRESQL_VERSION
+  required: true
+  value: 9.6
+- description: Name of new PostgreSQL image.
+  displayName: PostgreSQL image name
+  name: IMAGE_STREAM_NAME
+  required: true
+  value: ised-postgresql
+- description: Git source URI for application
+  displayName: Git Repository URL
+  name: SOURCE_REPOSITORY_URL
+  required: true
+  value: https://github.com/ised-isde-canada/ised-postgresql-s2i
+- description: Git branch/tag reference
+  displayName: Git Reference
+  name: SOURCE_REPOSITORY_REF
+  value: 9.6
+- description: Path within Git project to build; empty for root project directory.
+  displayName: Context Directory
+  name: CONTEXT_DIR
