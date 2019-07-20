@@ -1,5 +1,3 @@
-CREATE USER :dbuser WITH PASSWORD ':dbpassword';
-
 \c :dbname;
 
 REVOKE CONNECT ON DATABASE :dbname FROM PUBLIC;
